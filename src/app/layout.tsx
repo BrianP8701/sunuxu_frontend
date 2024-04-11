@@ -52,11 +52,11 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
             router.push("/secondary_landing");
           }
         } else {
-          router.push("/login");
+          router.push("/signin");
         }
       } catch (error) {
         console.error("Error checking authentication status:", error);
-        router.push("/login");
+        router.push("/signin");
       }
     };
 
