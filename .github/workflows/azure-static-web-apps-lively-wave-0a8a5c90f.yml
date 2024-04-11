@@ -19,6 +19,10 @@ jobs:
         with:
           submodules: true
           lfs: false
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
       - name: Remove extra header from git config
         run: git config --unset-all http.https://github.com/.extraheader
       - name: Build And Deploy
