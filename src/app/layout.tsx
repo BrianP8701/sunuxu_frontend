@@ -40,17 +40,22 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const response = await fetch("/api/checkAuthStatus");
-        const data = await response.json();
+        // const response = await fetch("/api/checkAuthStatus");
+        // const data = await response.json();
+        const data = {
+          authenticated: false,
+          user: {}
+        }
 
         if (data.authenticated) {
-          dispatch(setUser(data.user));
+          
+          // dispatch(setUser(data.user));
 
-          if (data.user.user_type === "primary") {
-            router.push("/primary_landing");
-          } else if (data.user.user_type === "secondary") {
-            router.push("/secondary_landing");
-          }
+          // if (data.user.user_type === "primary") {
+          //   router.push("/primary_landing");
+          // } else if (data.user.user_type === "secondary") {
+          //   router.push("/secondary_landing");
+          // }
         } else {
           router.push("/signin");
         }
