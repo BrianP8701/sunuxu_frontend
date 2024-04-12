@@ -1,35 +1,30 @@
-// // auth.ts
-// import axios from 'axios';
+// src/app/api/authService.ts
+import axios from 'axios';
 
-// const API_URL = 'your_api_url';
+const API_BASE_URL = 'https://your-azure-function-url.azurewebsites.net';
 
-// export const login = async (username: string, password: string) => {
-//   try {
-//     const response = await axios.post(`${API_URL}/authentication/login`, { username, password });
-//     const { access_token, refresh_token } = response.data;
-//     localStorage.setItem('access_token', access_token);
-//     localStorage.setItem('refresh_token', refresh_token);
-//     return true;
-//   } catch (error) {
-//     console.error('Login failed:', error);
-//     return false;
-//   }
-// };
+export const signupUser = async (email: string, password: string) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/signup`, {
+      email,
+      password
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Failed to sign up:', error);
+    throw error;
+  }
+}
 
-// export const getAccessToken = () => {
-//   return localStorage.getItem('access_token');
-// };
-
-// export const getRefreshToken = () => {
-//   return localStorage.getItem('refresh_token');
-// };
-
-// export const setTokens = (access_token: string, refresh_token: string) => {
-//   localStorage.setItem('access_token', access_token);
-//   localStorage.setItem('refresh_token', refresh_token);
-// };
-
-// export const logout = () => {
-//   localStorage.removeItem('access_token');
-//   localStorage.removeItem('refresh_token');
-// };
+export const loginUser = async (email: string, password: string) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/login`, {
+      email,
+      password
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Failed to login:', error);
+    throw error;
+  }
+};

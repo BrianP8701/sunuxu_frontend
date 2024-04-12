@@ -1,9 +1,14 @@
+// app/pages/signin/page.tsx
 import Image from "next/image"
 import Link from "next/link"
+
+import { loginUser } from '@/app/api/auth';
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+
+
 
 export default function Dashboard() {
   return (
@@ -47,7 +52,7 @@ export default function Dashboard() {
           </div>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="underline">
+            <Link href="/pages/signup" className="underline">
               Sign up
             </Link>
           </div>

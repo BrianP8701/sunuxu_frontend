@@ -57,11 +57,11 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
           //   router.push("/secondary_landing");
           // }
         } else {
-          router.push("/signin");
+          router.push("/pages/signin");
         }
       } catch (error) {
         console.error("Error checking authentication status:", error);
-        router.push("/signin");
+        router.push("/pages/signin");
       }
     };
 
