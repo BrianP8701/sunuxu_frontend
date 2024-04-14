@@ -1,24 +1,15 @@
 // app/store/userSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface User {
-  username: string;
-  email: string;
-  phoneNumber: string;
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  transactionIds: string[];
-}
+import { User } from "@/types/user";
 
 const initialState: User = {
-  username: "",
   email: "",
-  phoneNumber: "",
-  firstName: "",
-  middleName: "",
-  lastName: "",
-  transactionIds: [],
+  phone: "",
+  first_name: "",
+  middle_name: "",
+  last_name: "",
+  transactions: {},
+  user_type: ""
 };
 
 const userSlice = createSlice({

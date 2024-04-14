@@ -1,8 +1,8 @@
-// app/pages/signin/page.tsx
+// app/home/signin/page.tsx
 import Image from "next/image"
 import Link from "next/link"
 
-import { loginUser } from '@/app/api/auth';
+import { signinUser } from '@/app/api/authentication';
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -46,13 +46,13 @@ export default function Dashboard() {
             <Button type="submit" className="w-full">
               Login
             </Button>
-            <Button variant="outline" className="w-full">
+            {/* <Button variant="outline" className="w-full">
               Login with Google
-            </Button>
+            </Button> */}
           </div>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
-            <Link href="/pages/signup" className="underline">
+            <Link href="/authentication/signup" className="underline">
               Sign up
             </Link>
           </div>
@@ -62,11 +62,13 @@ export default function Dashboard() {
         <Image
           src="/snow.jpeg"
           alt="Image"
-          layout="fill"
-          objectFit="cover"
           className="absolute top-0 left-0 w-full h-full"
-        />
+          fill
+          sizes="(min-width: 1024px) 100vw, 0vw"
+          style={{
+            objectFit: "cover"
+          }} />
       </div>
     </div>
-  )
+  );
 }

@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
@@ -48,7 +48,7 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
         }
 
         if (data.authenticated) {
-          
+
           // dispatch(setUser(data.user));
 
           // if (data.user.user_type === "primary") {
@@ -57,11 +57,11 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
           //   router.push("/secondary_landing");
           // }
         } else {
-          router.push("/pages/signin");
+          router.push("/home");
         }
       } catch (error) {
         console.error("Error checking authentication status:", error);
-        router.push("/pages/signin");
+        router.push("/home");
       }
     };
 
