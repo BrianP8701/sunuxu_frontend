@@ -1,16 +1,39 @@
 // app/home/signin/page.tsx
+"use client";
 import Image from "next/image"
 import Link from "next/link"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
+import { setUser } from '@/app/store/userSlice';
 import { signinUser } from '@/app/api/authentication';
+import { useDispatch } from 'react-redux';
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
+export default function Signin() {
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
+  const router = useRouter();
 
-export default function Dashboard() {
+  const handleSignin = async () => {
+    console.log('Signin button clicked');
+    setError('');
+    try {
+      const user = await signinUser(email, password);
+      dispatch(setUser(user));
+      console.log('Signin successful', user);
+      router.push('/pages/copilot'); // Redirect to dashboard upon success
+    } catch (error) {
+      setError('Signin failed');
+    }
+  };
+
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="flex items-center justify-center py-12">
@@ -29,6 +52,8 @@ export default function Dashboard() {
                 type="email"
                 placeholder="m@example.com"
                 required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
@@ -41,18 +66,24 @@ export default function Dashboard() {
                   Forgot your password?
                 </Link>
               </div>
-              <Input id="password" type="password" required />
+              <Input
+                id="password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
-            <Button type="submit" className="w-full">
+            <Button type="button" onClick={handleSignin} className="w-full">
               Login
             </Button>
-            {/* <Button variant="outline" className="w-full">
-              Login with Google
-            </Button> */}
           </div>
+          {error && (
+            <div className="text-red-500 text-center text-sm">{error}</div>
+          )}
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
-            <Link href="/authentication/signup" className="underline">
+            <Link href="/pages/signup" className="underline">
               Sign up
             </Link>
           </div>

@@ -6,9 +6,7 @@ const initialState: User = {
   email: "",
   phone: "",
   first_name: "",
-  middle_name: "",
   last_name: "",
-  transactions: {},
   user_type: ""
 };
 

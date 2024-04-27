@@ -6,10 +6,13 @@ import "./globals.css";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
-import { setUser } from "./store/userSlice";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 import { ThemeProvider } from "@/components/theme-provider"
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistor } from './store/store'; // Import persistor
+import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { usePathname } from 'next/navigation'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +27,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           disableTransitionOnChange
         >
           <Provider store={store}>
-            <AuthWrapper>{children}</AuthWrapper>
+            <PersistGate loading={null} persistor={persistor}>
+              <AuthWrapper>
+                <TooltipProvider>
+                  {children}
+                </TooltipProvider>
+              </AuthWrapper>
+            </PersistGate>
           </Provider>
         </ThemeProvider>
       </body>
@@ -35,38 +44,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 function AuthWrapper({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const dispatch = useDispatch();
-  const user = useSelector((state: any) => state.user);
+  const current_page = useSelector((state: any) => state.app.current_page);
+  const pathName = usePathname();
 
   useEffect(() => {
     const checkAuthStatus = async () => {
-      try {
-        // const response = await fetch("/api/checkAuthStatus");
-        // const data = await response.json();
-        const data = {
-          authenticated: false,
-          user: {}
+      // const response = await fetch("/api/checkAuthStatus");
+      // const data = await response.json();
+      const isAuthenticated = true;
+
+      if (isAuthenticated) {
+      } else {
+        if (pathName !== current_page) {
+          router.push(current_page);
         }
-
-        if (data.authenticated) {
-
-          // dispatch(setUser(data.user));
-
-          // if (data.user.user_type === "primary") {
-          //   router.push("/primary_landing");
-          // } else if (data.user.user_type === "secondary") {
-          //   router.push("/secondary_landing");
-          // }
-        } else {
-          router.push("/home");
-        }
-      } catch (error) {
-        console.error("Error checking authentication status:", error);
-        router.push("/home");
       }
     };
 
     checkAuthStatus();
-  }, [dispatch, router]);
+  }, [dispatch, router, current_page, pathName]);
 
   return <>{children}</>;
 }

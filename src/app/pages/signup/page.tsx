@@ -4,31 +4,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
+import { setUser } from '@/app/store/userSlice';
+import { useDispatch } from 'react-redux';
 import { signupUser } from '@/app/api/authentication';
 import { ApiError } from "@/types/apiError";
-import UserTypeSelect from "@/components/static/UserTypeSelect";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
 
-export default function Dashboard() {
+
+
+export default function Signup() {
+    const dispatch = useDispatch();
+    
     const [firstName, setFirstName] = useState('');
-    const [middleName, setMiddleName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
-    const [userType, setUserType] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
@@ -38,7 +31,6 @@ export default function Dashboard() {
     const [isEmailEmpty, setIsEmailEmpty] = useState(false);
     const [isPasswordEmpty, setIsPasswordEmpty] = useState(false);
     const [isConfirmPasswordEmpty, setIsConfirmPasswordEmpty] = useState(false);
-    const [isUserTypeEmpty, setIsUserTypeEmpty] = useState(false);
     const [isPhoneEmpty, setIsPhoneEmpty] = useState(false);
 
     const router = useRouter(); // for routing
@@ -52,10 +44,9 @@ export default function Dashboard() {
         setIsEmailEmpty(!email);
         setIsPasswordEmpty(!password);
         setIsConfirmPasswordEmpty(!confirmPassword);
-        setIsUserTypeEmpty(!userType);
         setIsPhoneEmpty(!phone);
 
-        if (!firstName || !lastName || !email || !password || !confirmPassword || !userType || !phone) {
+        if (!firstName || !lastName || !email || !password || !confirmPassword || !phone) {
             errorMessage = 'Fill out required fields';
             isValid = false;
         }
@@ -75,9 +66,10 @@ export default function Dashboard() {
         if (validateForm()) {
             setError('');
             try {
-                const user = await signupUser(email, password, firstName, middleName, lastName, userType, phone);
+                const user = await signupUser(email, password, firstName, lastName, phone);
+                dispatch(setUser(user));
                 console.log('Signup successful', user);
-                router.push('/home/dashboard'); // Redirect to dashboard upon success
+                router.push('/pages/copilot'); // Redirect to dashboard upon success
             } catch (error) {
                 const typedError = error as ApiError;
                 setError(typedError.message || 'Signup failed');
@@ -89,7 +81,7 @@ export default function Dashboard() {
         <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
             <div className="flex items-center justify-center py-12">
                 <div className="mx-auto grid w-[350px] gap-6">
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 gap-4">
                         <div className="grid gap-2">
                             <Label htmlFor="first-name" className={isFirstNameEmpty ? 'error-label' : ''}>First name</Label>
                             <Input
@@ -101,15 +93,6 @@ export default function Dashboard() {
                             />
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="middle-name">Middle name</Label>
-                            <Input
-                                id="middle-name"
-                                placeholder="Murray"
-                                value={middleName}
-                                onChange={(e) => setMiddleName(e.target.value)}
-                            />
-                        </div>
-                        <div className="grid gap-2">
                             <Label htmlFor="last-name" className={isLastNameEmpty ? 'error-label' : ''}>Last name</Label>
                             <Input
                                 id="last-name"
@@ -118,14 +101,6 @@ export default function Dashboard() {
                                 value={lastName}
                                 onChange={(e) => setLastName(e.target.value)}
                             />
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="grid">
-                            <div className="grid gap-2">
-                                <Label htmlFor="user-type" className={isUserTypeEmpty ? 'error-label' : ''}>User type</Label>
-                                <UserTypeSelect value={userType} onChange={setUserType} />
-                            </div>
                         </div>
                     </div>
                     <div className="grid gap-2">
@@ -178,7 +153,7 @@ export default function Dashboard() {
                         <p key={index} className="text-red-500 text-center text-sm">{line}</p>
                     ))}                    <div className="text-center text-sm">
                         Already have an account?{" "}
-                        <Link href="/authentication/signin" className="underline">
+                        <Link href="/pages/signin" className="underline">
                             Sign in
                         </Link>
                     </div>
