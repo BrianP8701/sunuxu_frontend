@@ -8,7 +8,9 @@ import {
     Database,
     FileText,
     Handshake,
-    Bug
+    Bug,
+    Diamond,
+    FlaskConical
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -25,16 +27,12 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-    DialogFooter,
-
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { setCurrentPage } from "@/app/store/appSlice"
 import { useDispatch } from "react-redux"
 import { SettingsComponent } from "@/components/custom/settings/Settings"
 
-export default function Dashboard({ title, children }: { title: string, children: React.ReactNode }) {
+export default function MainLayout({ title, children }: { title: string, children: React.ReactNode }) {
     const router = useRouter();
     const dispatch = useDispatch();
 
@@ -48,7 +46,7 @@ export default function Dashboard({ title, children }: { title: string, children
             <aside className="inset-y fixed left-0 z-20 flex h-full flex-col border-r">
                 <div className="border-b p-2">
                     <Button variant="outline" size="icon" aria-label="Home">
-                        <Triangle className="size-5 fill-foreground" />
+                        <Diamond className="size-5 fill-foreground" />
                     </Button>
                 </div>
                 <nav className="grid gap-1 p-2">
@@ -146,6 +144,22 @@ export default function Dashboard({ title, children }: { title: string, children
                         </TooltipTrigger>
                         <TooltipContent side="right" sideOffset={5}>
                             Debugging
+                        </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="rounded-lg"
+                                aria-label="Experimental"
+                                onClick={() => handleNavigation('/pages/experimental')}
+                            >
+                                <FlaskConical className="size-5" />
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="right" sideOffset={5}>
+                            Experimental
                         </TooltipContent>
                     </Tooltip>
                 </nav>

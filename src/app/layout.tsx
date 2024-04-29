@@ -3,7 +3,7 @@
 
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { Provider } from "react-redux";
@@ -17,8 +17,11 @@ import { usePathname } from 'next/navigation'
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+
   return (
     <html lang="en">
+      <head>
+      </head>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
@@ -28,11 +31,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
-              <AuthWrapper>
-                <TooltipProvider>
-                  {children}
-                </TooltipProvider>
-              </AuthWrapper>
+              <TooltipProvider>
+                <AuthWrapper>{children}</AuthWrapper>
+              </TooltipProvider>
             </PersistGate>
           </Provider>
         </ThemeProvider>
