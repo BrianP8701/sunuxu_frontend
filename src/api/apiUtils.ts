@@ -31,10 +31,9 @@ export function withApiErrorHandling<T, Args extends any[]>(apiCall: (...args: A
 
 export function generateBackendUrl(backendRoute: string): string {
   const backend_mode = process.env.NEXT_PUBLIC_BACKEND_MODE;
-  console.log('backend_mode: ' + backend_mode);
   if (backend_mode === 'development') {
     return `http://localhost:7071/api/${backendRoute}`;
   } else {
-    return `http://sunuxu-test-functions.azurewebsites.net/api/${backendRoute}${process.env.FUNCTION_APP_HOST_KEY}`;
+    return `http://sunuxu-test-functions.azurewebsites.net/api/${backendRoute}?${process.env.NEXT_PUBLIC_FUNCTION_APP_HOST_KEY}`;
   }
 }

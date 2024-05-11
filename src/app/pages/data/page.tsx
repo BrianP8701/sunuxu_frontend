@@ -1,45 +1,42 @@
 // src/app/pages/data/page.tsx
 "use client";
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import {
-    Home,
-    LineChart,
-    Users,
-    Menu
-} from "lucide-react";
-import { useDispatch } from 'react-redux';
-import { setCurrentCrmTab } from '@/app/store/appSlice';
 
-import PeopleDataTab from '@/components/custom/data/people';
-import PropertiesDataTab from '@/components/custom/data/properties';
-import TransactionsDataTab from '@/components/custom/data/transactions';
-
-import { propertiesTableColumns } from '@/app/pages/data/propertiesTable';
-import { PropertiesTableControls, PropertiesTableFooter } from '@/app/pages/data/propertiesTable';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/app/store/store';
+import { Menu } from "lucide-react";
+import { ThreeDots } from 'react-loader-spinner';
 import {
     Sheet,
     SheetContent,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import { Payment, columns } from "@/components/custom/data/transactions/columns"
-import { DataTable } from "@/components/custom/data-table"
+import { VisibilityState } from '@tanstack/react-table';
 
 import MainLayout from '@/components/layouts/MainLayout';
 
-const HomePage = () => {
-    const dispatch = useDispatch();
-    const current_crm_tab = useSelector((state: RootState) => state.app.current_crm_tab);
-    const [isNavVisible, setIsNavVisible] = useState(true);
+import RenderTab from '@/app/pages/data/renderTab';
+import { DataNavigation } from '@/app/pages/data/dataNavigation';
 
-    // For responsive design
+import { useFetchDataEffect } from '@/app/pages/data/useFetchDataEffect';
+
+const DataPage = () => {
+    const [xPadding, setXPadding] = useState<number>(100)
+    const [isNavVisible, setIsNavVisible] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+
+    // Table stuff
+    const [data, setData] = useState(null);
+    const [rowSelection, setRowSelection] = useState({})
+    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
+
+    useFetchDataEffect({ setData, setIsLoading })
+
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth < 1024) {
+            if (window.innerWidth < 1320) {
+                setXPadding(0)
                 setIsNavVisible(false);
             } else {
+                setXPadding(100)
                 setIsNavVisible(true);
             }
         };
@@ -50,97 +47,9 @@ const HomePage = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const renderTab = () => {
-        const data = getData()
-
-        switch (current_crm_tab) {
-            case 'people':
-                return <PeopleDataTab />;
-            case 'properties':
-                return (
-                    <div className="container mx-auto py-10">
-                        <PropertiesTableControls />
-                        <DataTable columns={propertiesTableColumns} data={data} />
-                        <PropertiesTableFooter />
-                    </div>
-                )
-            case 'transactions':
-                return (
-                    <div className="container mx-auto py-10">
-                        <DataTable columns={columns} data={data} />
-                    </div>
-                )
-            default:
-                return null;
-        }
-    };
-
-    function getData(): Payment[] {
-        // Fetch data from your API here.
-        return [
-            {
-                id: "728ed52f",
-                amount: 100,
-                status: "pending",
-                email: "m@example.com",
-            },
-            {
-                id: "728ed52g",
-                amount: 200,
-                status: "processing",
-                email: "m@example.com",
-            },
-            {
-                id: "728ed52h",
-                amount: 300,
-                status: "success",
-                email: "m@example.com",
-            },
-            {
-                id: "728ed52i",
-                amount: 400,
-                status: "failed",
-                email: "k@example.com",
-            },
-            {
-                id: "728ed52j",
-                amount: 500,
-                status: "pending",
-                email: "k@example.com",
-            },
-            
-        ]
-    }
-
-
-    const DataNavigation = () => (
-        <nav className="p-4">
-            <Link
-                href="#"
-                onClick={() => dispatch(setCurrentCrmTab('people'))}
-                className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${current_crm_tab === 'people' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
-            >
-                <Users className="h-4 w-4" />
-                People
-            </Link>
-            <Link
-                href="#"
-                onClick={() => dispatch(setCurrentCrmTab('properties'))}
-                className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${current_crm_tab === 'properties' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
-            >
-                <Home className="h-4 w-4" />
-                Properties
-            </Link>
-            <Link
-                href="#"
-                onClick={() => dispatch(setCurrentCrmTab('transactions'))}
-                className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${current_crm_tab === 'transactions' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
-            >
-                <LineChart className="h-4 w-4" />
-                Transactions
-            </Link>
-        </nav>
-    );
+    useEffect(() => {
+        console.log(rowSelection)
+    }, [rowSelection]);
 
     return (
         <MainLayout title="Data">
@@ -148,28 +57,47 @@ const HomePage = () => {
                 width: '100%',
                 height: '100%',
                 display: 'grid',
-                gridTemplateColumns: isNavVisible ? '190px 1fr' : '1fr'
+                gridTemplateColumns: isNavVisible ? '190px 1fr' : '1fr',
+                position: 'relative' // Add relative positioning here
             }}>
                 {isNavVisible && (
-                    <div className="border-r">
+                    <div className="border-r p-3">
                         <DataNavigation />
                     </div>
                 )}
                 <div style={{
-                    padding: 32, // Ensure padding on all sides
+                    paddingLeft: xPadding,
+                    paddingRight: xPadding,
                     flexGrow: 1, // Make sure it takes up all available space
                     display: 'flex', // Use flex to fill the area
                     flexDirection: 'column' // Stack children vertically
                 }}>
-                    {renderTab()}
+                    <RenderTab
+                        data={data}
+                        rowSelection={rowSelection}
+                        setRowSelection={setRowSelection}
+                        columnVisibility={columnVisibility}
+                        setColumnVisibility={setColumnVisibility}
+                    />
                 </div>
+                {isLoading && (
+                    <div style={{
+                        position: 'absolute', // Overlay the loader
+                        top: '15px', // Distance from the top
+                        right: '15px', // Distance from the right
+                        zIndex: 1000, // Ensure it's on top of other content
+                        color: 'var(--secondary)' // Using CSS variable for secondary color
+                    }}>
+                        <ThreeDots height={50} width={50} color="currentColor" />
+                    </div>
+                )}
             </div>
             {!isNavVisible && (
-                <Sheet>
+                <Sheet >
                     <SheetTrigger>
-                        <Menu className="h-6 w-6" style={{ position: 'absolute', top: 58, left: 58 }} />
+                        <Menu className="h-8 w-8" style={{ position: 'absolute', top: 60, left: 60 }} />
                     </SheetTrigger>
-                    <SheetContent side="left" className="w-[300px]">
+                    <SheetContent side="left" className="w-[200px]">
                         <DataNavigation />
                     </SheetContent>
                 </Sheet>
@@ -178,4 +106,4 @@ const HomePage = () => {
     );
 };
 
-export default HomePage;
+export default DataPage;

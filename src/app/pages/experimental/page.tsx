@@ -1,4 +1,5 @@
-import React from 'react';
+"use client";
+import React, { useEffect, useState } from 'react';
 import {
     Card,
     CardContent,
@@ -10,8 +11,11 @@ import {
 import { Input } from "@/components/ui/input";
 
 import MainLayout from '@/components/layouts/MainLayout';
+import { AddressInput } from '@/components/custom/AddressInput';
+
 
 function ExperimentPage() {
+
     return (
         <MainLayout title="Experimental">
             <div className="w-full h-full justify-center items-center flex">
@@ -20,7 +24,6 @@ function ExperimentPage() {
                         <CardTitle>Experimental</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <Input type="text" placeholder="Search" />
                     </CardContent>
                 </Card>
             </div>

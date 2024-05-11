@@ -76,6 +76,62 @@
   }
 }
 
-.error-label {
+.error-color {
   color: red;
+}
+
+
+.button-hide-1 {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 950px) {
+  .button-hide-1 {
+    display: none;
+  }
+}
+
+.button-hide-2 {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 840px) {
+  .button-hide-2 {
+    display: none;
+  }
+}
+
+.button-hide-3 {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 730px) {
+  .button-hide-3 {
+    display: none;
+  }
+}
+
+.button-hide-4 {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 580px) {
+  .button-hide-4 {
+    display: none;
+  }
+}
+
+.button-hide-5 {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 500px) {
+  .button-hide-5 {
+    display: none;
+  }
 }

@@ -2,16 +2,17 @@
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
-import { withApiErrorHandling, generateBackendUrl } from '@/app/api/apiUtils';
+import { withApiErrorHandling, generateBackendUrl } from '@/api/apiUtils';
 
 export const signupUser = withApiErrorHandling(async (
-  email: string, password: string, first_name: string,
+  email: string, password: string, first_name: string, middle_name: string,
   last_name: string, phone: string) => {
-    console.log('signupUser called with email: ' + email + ', password: ' + password + ', first_name: ' + first_name + ', last_name: ' + last_name + ', phone: ' + phone);
+  console.log('signupUser called with email: ' + email + ', password: ' + password + ', first_name: ' + first_name + ', last_name: ' + last_name + ', phone: ' + phone);
   const response = await axios.post(generateBackendUrl(`signup`), {
     email,
     password,
     first_name,
+    middle_name,
     last_name,
     phone
   }, {

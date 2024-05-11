@@ -37,7 +37,7 @@ function ProfileTab() {
     return (
         <div className="flex flex-col gap-4 w-[50%] justify-center mx-auto">
             <div className="grid gap-2">
-                <Label htmlFor="email" className={isEmailEmpty ? 'error-label' : ''}>Email</Label>
+                <Label htmlFor="email" className={isEmailEmpty ? 'error-color' : ''}>Email</Label>
                 <Input
                     id="email"
                     type="email"
@@ -48,7 +48,7 @@ function ProfileTab() {
                 />
             </div>
             <div className="grid gap-2">
-                <Label htmlFor="phone" className={isPhoneEmpty ? 'error-label' : ''}>Phone</Label>
+                <Label htmlFor="phone" className={isPhoneEmpty ? 'error-color' : ''}>Phone</Label>
                 <Input
                     id="phone"
                     type="tel"
@@ -59,7 +59,7 @@ function ProfileTab() {
                 />
             </div>
             <div className="grid gap-2">
-                <Label htmlFor="password" className={isPasswordEmpty ? 'error-label' : ''}>Password</Label>
+                <Label htmlFor="password" className={isPasswordEmpty ? 'error-color' : ''}>Password</Label>
                 <Input
                     id="password"
                     type="password"

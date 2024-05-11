@@ -6,17 +6,19 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { setUser } from '@/app/store/userSlice';
 import { useDispatch } from 'react-redux';
-import { signupUser } from '@/app/api/authentication';
+import { signupUser } from '@/api/authentication';
 import { ApiError } from "@/types/apiError";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ModeToggle } from "@/components/custom/ModeToggle"
 
 export default function Signup() {
     const dispatch = useDispatch();
-    
+
     const [firstName, setFirstName] = useState('');
+    const [middleName, setMiddleName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
@@ -64,7 +66,7 @@ export default function Signup() {
         if (validateForm()) {
             setError('');
             try {
-                const user = await signupUser(email, password, firstName, lastName, phone);
+                const user = await signupUser(email, password, firstName, middleName, lastName, phone);
                 dispatch(setUser(user));
                 console.log('Signup successful', user);
                 router.push('/pages/copilot'); // Redirect to dashboard upon success
@@ -76,12 +78,21 @@ export default function Signup() {
     };
 
     return (
-        <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
+        <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px] relative">
+            <div className="absolute top-4 left-1/2 transform -translate-x-12">
+                <ModeToggle />
+            </div>
             <div className="flex items-center justify-center py-12">
-                <div className="mx-auto grid w-[350px] gap-6">
-                    <div className="grid grid-cols-2 gap-4">
+                <div className="mx-auto grid w-[380px] gap-6">
+                    <div className="grid gap-2 text-center">
+                        <h1 className="text-3xl font-bold">Sign up</h1>
+                        <p className="text-balance text-muted-foreground">
+                            Enter your details below to create an account
+                        </p>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4">
                         <div className="grid gap-2">
-                            <Label htmlFor="first-name" className={isFirstNameEmpty ? 'error-label' : ''}>First name</Label>
+                            <Label htmlFor="first-name" className={isFirstNameEmpty ? 'error-color' : ''}>First name</Label>
                             <Input
                                 id="first-name"
                                 placeholder="Max"
@@ -91,7 +102,17 @@ export default function Signup() {
                             />
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="last-name" className={isLastNameEmpty ? 'error-label' : ''}>Last name</Label>
+                            <Label htmlFor="middle-name">Middle name</Label>
+                            <Input
+                                id="middle-name"
+                                placeholder="Max"
+                                required
+                                value={middleName}
+                                onChange={(e) => setMiddleName(e.target.value)}
+                            />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="last-name" className={isLastNameEmpty ? 'error-color' : ''}>Last name</Label>
                             <Input
                                 id="last-name"
                                 placeholder="Robinson"
@@ -101,30 +122,32 @@ export default function Signup() {
                             />
                         </div>
                     </div>
-                    <div className="grid gap-2">
-                        <Label htmlFor="email" className={isEmailEmpty ? 'error-label' : ''}>Email</Label>
-                        <Input
-                            id="email"
-                            type="email"
-                            placeholder="m@example.com"
-                            required
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="email" className={isEmailEmpty ? 'error-color' : ''}>Email</Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                placeholder="m@example.com"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="phone" className={isPhoneEmpty ? 'error-color' : ''}>Phone</Label>
+                            <Input
+                                id="phone"
+                                type="tel"
+                                placeholder="123-456-7890"
+                                required
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                            />
+                        </div>
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="phone" className={isPhoneEmpty ? 'error-label' : ''}>Phone</Label>
-                        <Input
-                            id="phone"
-                            type="tel"
-                            placeholder="123-456-7890"
-                            required
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                        />
-                    </div>
-                    <div className="grid gap-2">
-                        <Label htmlFor="password" className={isPasswordEmpty ? 'error-label' : ''}>Password</Label>
+                        <Label htmlFor="password" className={isPasswordEmpty ? 'error-color' : ''}>Password</Label>
                         <Input
                             id="password"
                             type="password"
@@ -133,7 +156,7 @@ export default function Signup() {
                         />
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="confirm-password" className={isConfirmPasswordEmpty ? 'error-label' : ''}>Confirm password</Label>
+                        <Label htmlFor="confirm-password" className={isConfirmPasswordEmpty ? 'error-color' : ''}>Confirm password</Label>
                         <Input
                             id="confirm-password"
                             type="password"

@@ -6,12 +6,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { setUser } from '@/app/store/userSlice';
-import { signinUser } from '@/app/api/authentication';
+import { signinUser } from '@/api/authentication';
 import { useDispatch } from 'react-redux';
+import { ApiError } from "@/types/apiError";
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { ModeToggle } from "@/components/custom/ModeToggle"
 
 export default function Signin() {
   const dispatch = useDispatch();
@@ -25,17 +27,23 @@ export default function Signin() {
     console.log('Signin button clicked');
     setError('');
     try {
+      console.log('Signing in...');
       const user = await signinUser(email, password);
       dispatch(setUser(user));
       console.log('Signin successful', user);
       router.push('/pages/copilot'); // Redirect to dashboard upon success
     } catch (error) {
-      setError('Signin failed');
+      const typedError = error as ApiError;
+      console.log('Signin failed:', typedError);
+      setError(typedError.message);
     }
   };
 
   return (
     <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
+      <div className="fixed top-4 left-4">
+        <ModeToggle />
+      </div>
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">

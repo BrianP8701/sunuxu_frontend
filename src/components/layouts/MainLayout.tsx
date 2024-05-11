@@ -1,4 +1,7 @@
 "use client";
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/app/store/store';
 import {
     Book,
     Bot,
@@ -7,10 +10,12 @@ import {
     Triangle,
     Database,
     FileText,
-    Handshake,
+    LineChart,
     Bug,
     Diamond,
-    FlaskConical
+    FlaskConical,
+    Scroll,
+    Handshake
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -35,6 +40,7 @@ import { SettingsComponent } from "@/components/custom/settings/Settings"
 export default function MainLayout({ title, children }: { title: string, children: React.ReactNode }) {
     const router = useRouter();
     const dispatch = useDispatch();
+    const current_page = useSelector((state: RootState) => state.app.current_page);
 
     const handleNavigation = (path: string) => {
         router.push(path);
@@ -55,7 +61,7 @@ export default function MainLayout({ title, children }: { title: string, childre
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="rounded-lg"
+                                className={`rounded-lg ${current_page === 'copilot' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
                                 aria-label="Copilot"
                                 onClick={() => handleNavigation('copilot')}
                             >
@@ -71,23 +77,7 @@ export default function MainLayout({ title, children }: { title: string, childre
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="rounded-lg"
-                                aria-label="Transactions"
-                                onClick={() => handleNavigation('transactions')}
-                            >
-                                <Handshake className="size-5" />
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="right" sideOffset={5}>
-                            Transactions
-                        </TooltipContent>
-                    </Tooltip>
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="rounded-lg"
+                                className={`rounded-lg ${current_page === 'data' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
                                 aria-label="Data"
                                 onClick={() => handleNavigation('data')}
                             >
@@ -103,11 +93,27 @@ export default function MainLayout({ title, children }: { title: string, childre
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="rounded-lg"
-                                aria-label="Paperwork"
-                                onClick={() => handleNavigation('/pages/paperwork')}
+                                className={`rounded-lg ${current_page === 'transactions' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
+                                aria-label="Transactions"
+                                onClick={() => handleNavigation('transactions')}
                             >
-                                <FileText className="size-5" />
+                                <Handshake className="size-5" />
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="right" sideOffset={5}>
+                            Transactions
+                        </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className={`rounded-lg ${current_page === 'paperwork' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
+                                aria-label="Paperwork"
+                                onClick={() => handleNavigation('paperwork')}
+                            >
+                                <Scroll className="size-5" />
                             </Button>
                         </TooltipTrigger>
                         <TooltipContent side="right" sideOffset={5}>
@@ -119,9 +125,9 @@ export default function MainLayout({ title, children }: { title: string, childre
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="rounded-lg"
+                                className={`rounded-lg ${current_page === 'documentation' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
                                 aria-label="Documentation"
-                                onClick={() => handleNavigation('/pages/documentation')}
+                                onClick={() => handleNavigation('documentation')}
                             >
                                 <Book className="size-5" />
                             </Button>
@@ -135,9 +141,9 @@ export default function MainLayout({ title, children }: { title: string, childre
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="rounded-lg"
+                                className={`rounded-lg ${current_page === 'debugging' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
                                 aria-label="Debugging"
-                                onClick={() => handleNavigation('/pages/debugging')}
+                                onClick={() => handleNavigation('debugging')}
                             >
                                 <Bug className="size-5" />
                             </Button>
@@ -151,9 +157,9 @@ export default function MainLayout({ title, children }: { title: string, childre
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="rounded-lg"
+                                className={`rounded-lg ${current_page === 'experimental' ? 'bg-muted text-primary' : 'text-muted-foreground'}`}
                                 aria-label="Experimental"
-                                onClick={() => handleNavigation('/pages/experimental')}
+                                onClick={() => handleNavigation('experimental')}
                             >
                                 <FlaskConical className="size-5" />
                             </Button>
@@ -217,7 +223,6 @@ export default function MainLayout({ title, children }: { title: string, childre
             </aside>
             <div className="flex flex-col overflow-hidden">
                 <header className="sticky top-0 z-10 flex h-[53px] items-center gap-1 border-b bg-background px-4">
-                    <h1 className="text-xl font-semibold">{title}</h1>
                     {/* Allow additional buttons by reserving space with utility classes if necessary */}
                     <div className="flex-1 flex justify-end">
                         <ModeToggle />

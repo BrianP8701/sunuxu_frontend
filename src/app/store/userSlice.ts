@@ -3,9 +3,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "@/types/user";
 
 const initialState: User = {
+  id: 0,
   email: "",
   phone: "",
   first_name: "",
+  middle_name: "",
   last_name: "",
   user_type: ""
 };
