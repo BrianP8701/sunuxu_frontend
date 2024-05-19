@@ -7,10 +7,7 @@ import {
     Bot,
     LifeBuoy,
     SquareUser,
-    Triangle,
     Database,
-    FileText,
-    LineChart,
     Bug,
     Diamond,
     FlaskConical,
@@ -188,7 +185,7 @@ export default function MainLayout({ title, children }: { title: string, childre
                                 <DialogHeader>
                                     <DialogTitle>Looking for help?</DialogTitle>
                                     <DialogDescription>
-                                        Contact me directly at 929-386-6970. Please text! I&apos;ll repond as soon as I can.
+                                        Text me directly at 929-386-6970, don&apos;t call. I&apos;ll repond as soon as I can.
                                     </DialogDescription>
                                 </DialogHeader>
                             </DialogContent>

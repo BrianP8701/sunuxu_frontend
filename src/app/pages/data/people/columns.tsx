@@ -48,7 +48,9 @@ export const PeopleTableColumns: ColumnDef<PersonRow>[] = [{
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("status") ? (row.getValue("status") as string) : "N/A"}</div>
+        <div className="capitalize">
+            {(row.getValue("status") as string).split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+        </div>
     ),
 },
 {
@@ -56,7 +58,8 @@ export const PeopleTableColumns: ColumnDef<PersonRow>[] = [{
     header: "Type",
     cell: ({ row }) => (
         <div className="capitalize">
-            {row.getValue("type") ? (row.getValue("type") as string).split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : "N/A"}
-        </div>),
-}
+            {(row.getValue("type") as string).split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+        </div>
+    ),
+},
 ]

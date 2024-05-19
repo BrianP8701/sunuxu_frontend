@@ -1,10 +1,24 @@
 // types/app.ts
-export interface App {
+export interface AppSlice {
     current_page: string;
-    current_crm_tab: "people" | "properties" | "transactions";
+}
+
+export interface UserSlice {
+    id: number;
+    email: string;
+    phone: string;
+    first_name: string;
+    middle_name: string;
+    last_name: string;
+    user_type: string;
+}
+
+export interface DataSlice {
+    current_data_table: "people" | "properties" | "transactions";
 
     include_transactions_types: { [key: string]: boolean };
     include_transactions_statuses: { [key: string]: boolean };
+    include_transactions_columns: { [key: string]: boolean };
     transactions_sort_by: "viewed" | "created" | "updated";
     transactions_sort_direction: "new" | "old";
     transactions_page_size: number;
@@ -15,6 +29,7 @@ export interface App {
 
     include_people_types: { [key: string]: boolean };
     include_people_statuses: { [key: string]: boolean };
+    include_people_columns: { [key: string]: boolean };
     people_sort_by: "viewed" | "created" | "updated";
     people_sort_direction: "new" | "old";
     people_page_size: number;
@@ -25,6 +40,7 @@ export interface App {
 
     include_properties_types: { [key: string]: boolean };
     include_properties_statuses: { [key: string]: boolean };
+    include_properties_columns: { [key: string]: boolean };
     properties_sort_by: "viewed" | "created" | "updated";
     properties_sort_direction: "new" | "old";
     properties_page_size: number;
@@ -34,4 +50,8 @@ export interface App {
     all_properties: { [key: string]: string }; // property addresses to ids
 
     refresh_table_data_flag: boolean;
+}
+
+export interface PaperworkSlice {
+    editor_current_file: string | File | null;
 }

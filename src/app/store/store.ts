@@ -1,10 +1,12 @@
 // app/store/store.ts
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./userSlice";
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import appReducer from './appSlice';
 import { combineReducers } from "redux";
+
+import userReducer from "./userSlice";
+import appReducer from './appSlice';
+import dataReducer from './dataSlice';
 
 const persistConfig = {
   key: 'sunuxu',
@@ -14,6 +16,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   user: userReducer,
   app: appReducer,
+  data: dataReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

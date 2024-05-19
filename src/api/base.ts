@@ -19,7 +19,36 @@ export const addPerson = withApiErrorHandling(async (person: Person) => {
     return response.json();
 });
 
-export const addProperty = withApiErrorHandling(async (user_id: string, address: string, street_number: string, street_name: string, street_suffix: string, unit_number: string, city: string, state: string, zip: string) => {
+export const addProperty = withApiErrorHandling(async (user_id: string, address: string, street_number: string, street_name: string, street_suffix: string, unit: string, city: string, state: string, zip: string) => {
 
 });
 
+export const deletePeople = withApiErrorHandling(async (payload: { id: number[] | number }) => {
+    const response = await fetch(generateBackendUrl("delete_person"), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    });
+});
+
+export const deleteProperty = withApiErrorHandling(async (payload: { id: number[] | number }) => {
+    const response = await fetch(generateBackendUrl("delete_property"), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    });
+});
+
+export const deleteTransaction = withApiErrorHandling(async (payload: { id: number[] | number }) => {
+    const response = await fetch(generateBackendUrl("delete_transaction"), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    });
+});

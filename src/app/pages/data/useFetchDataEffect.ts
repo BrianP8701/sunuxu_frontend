@@ -10,7 +10,7 @@ import { getTableData } from '@/api/tableData';
 import {
     setPropertiesCurrentPage, setPeopleCurrentPage, setTransactionsCurrentPage,
     setPeopleTotalItems, setPeopleTotalPages, setPropertiesTotalItems, setPropertiesTotalPages, setTransactionsTotalItems, setTransactionsTotalPages
-} from '@/app/store/appSlice';
+} from '@/app/store/dataSlice';
 
 interface UseDataFetchingProps {
     setData: React.Dispatch<React.SetStateAction<any>>;
@@ -23,7 +23,7 @@ export const useFetchDataEffect = ({
 }: UseDataFetchingProps) => {
     const dispatch = useDispatch();
     const {
-        current_crm_tab,
+        current_data_table,
         user_id,
         properties_page_size,
         properties_current_page,
@@ -46,11 +46,11 @@ export const useFetchDataEffect = ({
         refresh_table_data_flag,
     } = useSelector((state: RootState) => ({
         user_id: state.user.id,
-        ...state.app
+        ...state.data
     }));
 
     useEffect(() => {
-        if (current_crm_tab === 'properties') {
+        if (current_data_table === 'properties') {
             setIsLoading(true);
             getTableData(user_id, "properties", properties_page_size, properties_current_page, properties_sort_by, properties_sort_direction, include_properties_statuses, include_properties_types)
                 .then(fetchedData => {
@@ -66,7 +66,7 @@ export const useFetchDataEffect = ({
                     console.error('Error fetching properties data:', error);
                     setIsLoading(false);
                 });
-        } else if (current_crm_tab === 'people') {
+        } else if (current_data_table === 'people') {
             setIsLoading(true); // Set loading to true before fetching data
             getTableData(user_id, "people", people_page_size, people_current_page, people_sort_by, people_sort_direction, include_people_statuses, include_people_types)
                 .then(fetchedData => {
@@ -83,7 +83,7 @@ export const useFetchDataEffect = ({
                     setIsLoading(false);
                 });
         }
-        else if (current_crm_tab === 'transactions') {
+        else if (current_data_table === 'transactions') {
             setIsLoading(true); // Set loading to true before fetching data
             getTableData(user_id, "transactions", transactions_page_size, transactions_current_page, transactions_sort_by, transactions_sort_direction, include_transactions_statuses, include_transactions_types)
                 .then(fetchedData => {
@@ -104,7 +104,7 @@ export const useFetchDataEffect = ({
             console.error('Missing required state values for fetching properties data');
         }
         // Repeat for 'people' and 'transactions' with respective adjustments
-    }, [dispatch, user_id, current_crm_tab, properties_page_size,
+    }, [dispatch, user_id, current_data_table, properties_page_size,
         properties_current_page, properties_sort_by, properties_sort_direction,
         include_properties_statuses, include_properties_types, people_current_page,
         transactions_current_page, people_sort_by, people_sort_direction,

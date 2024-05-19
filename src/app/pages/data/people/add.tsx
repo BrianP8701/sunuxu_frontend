@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-import { refreshTableData } from '@/app/store/appSlice';
+import { refreshTableData } from '@/app/store/dataSlice';
 import { addPerson } from '@/api/base';
 import { Person } from '@/types/person';
 
@@ -65,7 +65,8 @@ const AddPersonDialogContent = () => {
                 last_name: lastName,
                 email: email,
                 phone: phone,
-                type: personType
+                type: personType,
+                status: 'inactive'
             } as Person;
 
             // Call addPerson with the newPerson object

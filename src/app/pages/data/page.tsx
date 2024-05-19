@@ -9,26 +9,15 @@ import {
     SheetContent,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import { VisibilityState } from '@tanstack/react-table';
 
 import MainLayout from '@/components/layouts/MainLayout';
 
-import RenderTab from '@/app/pages/data/renderTab';
+import RenderTab from '@/app/pages/data/renderTable';
 import { DataNavigation } from '@/app/pages/data/dataNavigation';
-
-import { useFetchDataEffect } from '@/app/pages/data/useFetchDataEffect';
 
 const DataPage = () => {
     const [xPadding, setXPadding] = useState<number>(100)
     const [isNavVisible, setIsNavVisible] = useState(true);
-    const [isLoading, setIsLoading] = useState(false);
-
-    // Table stuff
-    const [data, setData] = useState(null);
-    const [rowSelection, setRowSelection] = useState({})
-    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-
-    useFetchDataEffect({ setData, setIsLoading })
 
     useEffect(() => {
         const handleResize = () => {
@@ -47,10 +36,6 @@ const DataPage = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    useEffect(() => {
-        console.log(rowSelection)
-    }, [rowSelection]);
-
     return (
         <MainLayout title="Data">
             <div style={{
@@ -58,7 +43,7 @@ const DataPage = () => {
                 height: '100%',
                 display: 'grid',
                 gridTemplateColumns: isNavVisible ? '190px 1fr' : '1fr',
-                position: 'relative' // Add relative positioning here
+                position: 'relative', // Add relative positioning here
             }}>
                 {isNavVisible && (
                     <div className="border-r p-3">
@@ -68,19 +53,11 @@ const DataPage = () => {
                 <div style={{
                     paddingLeft: xPadding,
                     paddingRight: xPadding,
-                    flexGrow: 1, // Make sure it takes up all available space
-                    display: 'flex', // Use flex to fill the area
-                    flexDirection: 'column' // Stack children vertically
+                    flexGrow: 1 // Make sure it takes up all available space
                 }}>
-                    <RenderTab
-                        data={data}
-                        rowSelection={rowSelection}
-                        setRowSelection={setRowSelection}
-                        columnVisibility={columnVisibility}
-                        setColumnVisibility={setColumnVisibility}
-                    />
+                    <RenderTab />
                 </div>
-                {isLoading && (
+                {/* {isLoading && (
                     <div style={{
                         position: 'absolute', // Overlay the loader
                         top: '15px', // Distance from the top
@@ -90,7 +67,7 @@ const DataPage = () => {
                     }}>
                         <ThreeDots height={50} width={50} color="currentColor" />
                     </div>
-                )}
+                )} */}
             </div>
             {!isNavVisible && (
                 <Sheet >

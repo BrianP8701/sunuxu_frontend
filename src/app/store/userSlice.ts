@@ -1,8 +1,8 @@
 // app/store/userSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "@/types/user";
+import { UserSlice } from "@/types/reduxSlices";
 
-const initialState: User = {
+const initialState: UserSlice = {
   id: 0,
   email: "",
   phone: "",
@@ -16,7 +16,7 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<User>) => {
+    setUser: (state, action: PayloadAction<UserSlice>) => {
       return action.payload;
     },
     clearUser: () => initialState,

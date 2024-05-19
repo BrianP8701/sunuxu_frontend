@@ -60,14 +60,18 @@ export const TransactionsTableColumns: ColumnDef<Transaction>[] = [
         accessorKey: "status",
         header: "Status",
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("status")}</div>
+            <div className="capitalize">
+                {(row.getValue("status") as string).split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+            </div>
         ),
     },
     {
         accessorKey: "type",
         header: "Type",
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("type")}</div>
+            <div className="capitalize">
+                {(row.getValue("type") as string).split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+            </div>
         ),
     },
     {

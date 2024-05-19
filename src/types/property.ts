@@ -10,7 +10,7 @@ export interface Property {
     street_name: string;
     street_suffix: string;
     city: string;
-    unit_number?: string;
+    unit?: string;
     state: string;
     zip_code: string;
     country: string;

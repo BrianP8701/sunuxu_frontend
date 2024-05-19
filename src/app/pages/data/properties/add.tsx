@@ -22,7 +22,7 @@ import { Label } from "@/components/ui/label"
 
 import { AddressInput } from '@/components/custom/AddressInput';
 import { addProperty } from '@/api/base';
-import { refreshTableData } from '@/app/store/appSlice';
+import { refreshTableData } from '@/app/store/dataSlice';
 
 const AddPropertyDialogContent = () => {
     const dispatch = useDispatch();

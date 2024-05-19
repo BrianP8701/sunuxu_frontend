@@ -4,6 +4,20 @@ import { RootState } from '@/app/store/store';
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { CloudDownload, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+    Table as TableType
+} from "@tanstack/react-table"
+import {
+    Dialog,
+    DialogContent,
+    DialogTrigger,
+    DialogFooter,
+    DialogClose,
+
+
+} from "@/components/ui/dialog";
+import { deletePeople, deleteProperty, deleteTransaction } from '@/api/base';
+import { refreshTableData } from '@/app/store/dataSlice';
 
 interface DataTableFooterProps {
     current_page: number;
@@ -11,11 +25,13 @@ interface DataTableFooterProps {
     total_items: number;
     total_pages: number;
     set_current_page: any;
+    selected_ids?: string[];
+    table: TableType<any>
 }
 
-export const DataTableFooter: React.FC<DataTableFooterProps> = ({ current_page, page_size, total_items, total_pages, set_current_page }) => {
-    console.log("Current Page: ", current_page, "Page size:", page_size, "total items", total_items, "total_pages", total_pages);
+export const DataTableFooter: React.FC<DataTableFooterProps> = ({ current_page, page_size, total_items, total_pages, set_current_page, selected_ids, table }) => {
     const dispatch = useDispatch();
+    const current_data_table = useSelector((state: RootState) => state.data.current_data_table);
 
     const [showPaginationFull, setShowPaginationFull] = useState(true);
     useEffect(() => {
@@ -39,6 +55,45 @@ export const DataTableFooter: React.FC<DataTableFooterProps> = ({ current_page, 
 
     const startIndex = (current_page - 1) * page_size + 1;
     const endIndex = Math.min(startIndex + page_size - 1, total_items);
+
+    const getNumberOfSelected = () => {
+        return table.getSelectedRowModel().flatRows.length;
+    }
+
+    const handleDelete = () => {
+        const selected_ids = table.getSelectedRowModel().flatRows.map(row => row.original.id)
+        if (selected_ids.length == 0) {
+            return;
+        } else {
+            let payload = null
+            console.log("Type of selected_ids:", typeof selected_ids[0]);
+            if (selected_ids.length == 1) {
+                payload = selected_ids[0]
+            } else {
+                payload = selected_ids
+            }
+            payload = { "id": payload }
+            console.log("Payload for deletion:", JSON.stringify(payload));
+
+            switch (current_data_table) {
+                case "people":
+                    deletePeople(payload).then(() => {
+                        dispatch(refreshTableData());
+                    });
+                    break;
+                case "properties":
+                    deleteProperty(payload).then(() => {
+                        dispatch(refreshTableData());
+                    });
+                    break;
+                case "transactions":
+                    deleteTransaction(payload).then(() => {
+                        dispatch(refreshTableData());
+                    });
+                    break;
+            }
+        }
+    }
 
     const paginationItems = [];
     if (showPaginationFull) {
@@ -133,9 +188,21 @@ export const DataTableFooter: React.FC<DataTableFooterProps> = ({ current_page, 
                 </Pagination>
             </div>
             <div className="flex-1"></div>
-            <Button variant="outline" className="w-8 h-8 p-0 flex items-center justify-center z-10">
-                <Trash2 className="h-4 w-4" />
-            </Button>
+            <Dialog>
+                <DialogTrigger asChild>
+                    <Button variant="outline" className="w-8 h-8 p-0 flex items-center justify-center z-10">
+                        <Trash2 className="h-4 w-4" />
+                    </Button>
+                </DialogTrigger>
+                <DialogContent className="w-56">
+                    Delete {getNumberOfSelected()} items
+                    <DialogFooter>
+                        <DialogClose asChild>
+                            <Button type="submit" onClick={handleDelete} >Confirm</Button>
+                        </DialogClose>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
             <Button variant="outline" className="ml-2 w-28 h-8 p-0 flex items-center justify-center z-10">
                 Download
                 <CloudDownload className="ml-2 h-4 w-4" />
